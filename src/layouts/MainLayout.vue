@@ -1,12 +1,14 @@
 <template>
-  <Suspense>
-    <template #default>
-      <Home></Home>
-    </template>
-    <template #fallback>
-      <SplashScreenVue></SplashScreenVue>
-    </template>
-  </Suspense>
+  <div class="row justify-center">
+    <Suspense>
+      <template #default>
+        <Home></Home>
+      </template>
+      <template #fallback>
+        <SplashScreenVue></SplashScreenVue>
+      </template>
+    </Suspense>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -17,7 +19,7 @@ const Home = defineAsyncComponent(async ()=>
     await new Promise((resolve) => {
       setTimeout(()=>{
         resolve(import('src/pages/HomeApp.vue'));
-      }, 1000);
+      }, 500);
     })
 );
 </script>
