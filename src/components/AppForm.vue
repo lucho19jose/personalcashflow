@@ -3,7 +3,7 @@
     <div class="text-h6" style="text-align:center;">Añadir nuevo {{ props.name }}</div>
     <div class="q-mb-sm">
       <q-input outlined type="number" v-model="amount" label="Monto" 
-        :rules="[val => val.length > 0 && val !=0 || 'Ingrese el monto']" lazy-rules/>
+        :rules="[val => val.length > 0 && val !=0 || 'Ingrese el monto']" ref="amountref" @click="selectinput" lazy-rules/>
     </div>
     <div v-if="props.category" class="q-mb-sm">
       <q-select outlined v-model="categoryselected" :options="categories" label="Categoria" 
@@ -89,6 +89,12 @@
       return id;
     }
     return 0;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const amountref:any= ref(null)
+  const selectinput = () => {
+    amountref.value?.select();
   }
 
   /* const editForm */ 
