@@ -1,5 +1,5 @@
 <template>
-  <div>
-    HEllo statistics
-  </div>
+  <q-page padding>
+    statistics
+  </q-page>
 </template>

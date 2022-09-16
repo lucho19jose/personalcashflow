@@ -20,8 +20,9 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { useQuasar } from 'quasar'
+  import { getStorageData, saveNewRecord } from 'src/composables/useStorage';
 
-  const $q = useQuasar()
+  const $q = useQuasar();
   const amount = ref<number>(0);
   const description = ref<string>('');
   const categories = ref<string[]>(['Alimentacion', 'Pasaje', 'Estudio', 'Diversion', 'Otro']);
@@ -53,31 +54,35 @@
         date: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+ date.getDate() + ' ' + date.getHours()+':'+date.getMinutes()+':'+ date.getSeconds(),
         type: props.name == 'Gasto' ? 'expense' : 'income'
       }
-  
-      if($q.localStorage.getItem('transactions')){
-        let transactions: newtransaction[] | null = $q.localStorage.getItem('transactions');
-        transactions?.push(newOnetransaction)
-        console.log('transactions', transactions);
-        $q.localStorage.set('transactions', transactions);
+      
+      const status = saveNewRecord(newOnetransaction);
+      console.log('status', status);
+
+      if(status === 200){
+        $q.notify({
+          type: 'positive',
+          message: 'Registro añadido correctamente !',
+          timeout: 500,
+        })
       }else{
-        let transactions = []
-        transactions.push(newOnetransaction)
-        
-        $q.localStorage.set('transactions', transactions);
-      }
-      $q.notify({
-        type: 'positive',
-        message: 'Registro añadido correctamente !',
+        $q.notify({
+        type: 'negative',
+        message: 'A ocurrido un error :( ! 500',
         timeout: 500,
       })
+      }
     } catch (error) {
-
+      $q.notify({
+        type: 'negative',
+        message: 'A ocurrido un error :( !',
+        timeout: 500,
+      })
     }
   }
 
 
   const generateoneID = (): number => {
-    let transactions: newtransaction[] | null = $q.localStorage.getItem('transactions');
+    let transactions: newtransaction[] | null = getStorageData()
     if(transactions){
       let id: number = transactions.length;
       while(true){
