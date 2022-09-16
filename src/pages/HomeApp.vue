@@ -12,7 +12,7 @@
           />
   
           <q-toolbar-title>
-            CashFlowForYou
+            wastecontrol
           </q-toolbar-title>
   
           <div>Quasar v{{ $q.version }}</div>
@@ -40,7 +40,7 @@
                 </q-item-section>
                 <q-item-section>Inicio</q-item-section>
             </template>
-              <q-item clickable active-class="text-primary">
+              <q-item clickable active-class="text-primary" :to="{ name: 'index' }">
                 <q-item-section avatar>
                   <q-icon name="home" size="25px"/>
                 </q-item-section>
@@ -57,7 +57,7 @@
                 </q-item-section>
                 <q-item-section>Movimientos</q-item-section>
             </template>
-              <q-item clickable active-class="text-primary">
+              <q-item clickable active-class="text-primary" :to="{ name: 'movements' }">
                 <q-item-section avatar>
                   <q-icon name="library_books" size="25px"/>
                 </q-item-section>
@@ -74,7 +74,7 @@
                 </q-item-section>
                 <q-item-section>Estadisticas</q-item-section>
             </template>
-              <q-item clickable active-class="text-primary">
+              <q-item clickable active-class="text-primary" :to="{ name: 'statistics' }">
                 <q-item-section avatar>
                   <q-icon name="fas fa-chart-bar" size="25px"/>
                 </q-item-section>
@@ -82,6 +82,22 @@
               </q-item>
           </q-expansion-item>
           <!-- config item to put categories -->
+          <q-expansion-item v-model="models[3].value" :content-inset-level="0.5" expand-separator>
+            <template v-slot:header>
+                <q-item-section avatar>
+                  <q-avatar>
+                    <q-icon name="fas fa-tools" size="25px" />
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>Configuración</q-item-section>
+            </template>
+              <q-item clickable active-class="text-primary" :to="{ name: 'configs' }">
+                <q-item-section avatar>
+                  <q-icon name="newspaper" size="25px"/>
+                </q-item-section>
+                <q-item-section>Configuración</q-item-section>
+              </q-item>
+          </q-expansion-item>
         </q-list>
       </q-drawer>
   
@@ -92,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   
   const leftDrawerOpen = ref(false)
 
@@ -111,10 +127,18 @@
     {
       value: false
     },
+    {
+      value: false
+    },
   ])
   
   function toggleLeftDrawer() {
     leftDrawerOpen.value = !leftDrawerOpen.value
   }
+
+  watch(models, ()=>{
+    console.log('hello');
+  });
+
   </script>
   

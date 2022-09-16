@@ -15,11 +15,11 @@
 import { defineAsyncComponent } from 'vue';
 import SplashScreenVue from 'src/components/SplashScreen.vue';
 
-const Home = defineAsyncComponent(async ()=>
-    await new Promise((resolve) => {
+const Home = defineAsyncComponent(async ()=>import('src/pages/HomeApp.vue')
+    /* await new Promise((resolve) => {
       setTimeout(()=>{
         resolve(import('src/pages/HomeApp.vue'));
-      }, 500);
-    })
+      }, 100);
+    }) */
 );
 </script>
