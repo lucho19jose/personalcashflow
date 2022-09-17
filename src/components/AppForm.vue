@@ -2,15 +2,15 @@
   <q-form @submit="saveForm">
     <div class="text-h6" style="text-align:center;">Añadir nuevo {{ props.name }}</div>
     <div class="q-mb-sm">
-      <q-input outlined type="number" v-model="amount" label="Monto" 
+      <q-input outlined type="number" step=".01" v-model="amount" label="Monto" 
         :rules="[val => val.length > 0 && val !=0 || 'Ingrese el monto']" ref="amountref" @click="selectinput" lazy-rules/>
     </div>
     <div v-if="props.category" class="q-mb-sm">
-      <q-select outlined v-model="categoryselected" :options="categories" label="Categoria" 
+      <q-select ref="categoryref" outlined v-model="categoryselected" :options="categories" label="Categoria" 
         :rules="[val => val.length > 0 || 'Seleccione la categoria']" lazy-rules/>
     </div>
     <div class="q-mb-sm">
-      <q-input outlined v-model="description" label="Descripcion" />
+      <q-input ref="descriptionref" outlined v-model="description" label="Descripcion" />
     </div>
     <div class=" row justify-center">
       <q-btn color="primary" :label="`Añadir ${ props.name }`" type="submit"/>
@@ -27,6 +27,11 @@
   const description = ref<string>('');
   const categories = ref<string[]>(['Alimentacion', 'Pasaje', 'Estudio', 'Diversion', 'Otro']);
   const categoryselected = ref<string>('');
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const amountref:any= ref(null)
+  const categoryref:any = ref(null)
+  const descriptionref:any = ref(null)
 
   const props = defineProps({
     name: { type: String, required: true },
@@ -64,12 +69,18 @@
           message: 'Registro añadido correctamente !',
           timeout: 500,
         })
+        amount.value = 0;
+        categoryselected.value = '';
+        description.value? description.value = '': '';
+        amountref.value.resetValidation();
+        categoryref.value?.resetValidation();
+        descriptionref.value.resetValidation();
       }else{
         $q.notify({
-        type: 'negative',
-        message: 'A ocurrido un error :( ! 500',
-        timeout: 500,
-      })
+          type: 'negative',
+          message: 'A ocurrido un error :( ! 500',
+          timeout: 500,
+        })
       }
     } catch (error) {
       $q.notify({
@@ -96,11 +107,10 @@
     return 0;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const amountref:any= ref(null)
   const selectinput = () => {
     amountref.value?.select();
   }
+
 
   /* const editForm */ 
 </script>

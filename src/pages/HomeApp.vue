@@ -31,73 +31,23 @@
           </q-item-label>
         </q-list>
         <q-list>
-          <q-expansion-item v-model="models[0].value" :content-inset-level="0.5" expand-separator>
+          <q-expansion-item v-model="section.model" v-for="section in lateralbar" :key="section.name" :content-inset-level="0.5" expand-separator>
             <template v-slot:header>
                 <q-item-section avatar>
                   <q-avatar>
-                    <q-icon name="home" size="25px" />
+                    <q-icon :name="section.icon" size="25px" />
                   </q-avatar>
                 </q-item-section>
-                <q-item-section>Inicio</q-item-section>
+                <q-item-section>{{ section.name }}</q-item-section>
             </template>
-              <q-item clickable active-class="text-primary" :to="{ name: 'index' }">
+              <q-item clickable active-class="text-primary" v-for="item in section.items" :key="item.name" :to="{ name: item.to }">
                 <q-item-section avatar>
-                  <q-icon name="home" size="25px"/>
+                  <q-icon :name="item.icon" size="25px"/>
                 </q-item-section>
-                <q-item-section>Inicio</q-item-section>
+                <q-item-section>{{ item.name }}</q-item-section>
               </q-item>
-          </q-expansion-item>
-          
-          <q-expansion-item v-model="models[1].value" :content-inset-level="0.5" expand-separator>
-            <template v-slot:header>
-                <q-item-section avatar>
-                  <q-avatar>
-                    <q-icon name="library_books" size="25px" />
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section>Movimientos</q-item-section>
-            </template>
-              <q-item clickable active-class="text-primary" :to="{ name: 'movements' }">
-                <q-item-section avatar>
-                  <q-icon name="library_books" size="25px"/>
-                </q-item-section>
-                <q-item-section>Movimientos</q-item-section>
-              </q-item>
-          </q-expansion-item>
-
-          <q-expansion-item v-model="models[2].value" :content-inset-level="0.5" expand-separator>
-            <template v-slot:header>
-                <q-item-section avatar>
-                  <q-avatar>
-                    <q-icon name="analytics" size="25px" />
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section>Estadisticas</q-item-section>
-            </template>
-              <q-item clickable active-class="text-primary" :to="{ name: 'statistics' }">
-                <q-item-section avatar>
-                  <q-icon name="fas fa-chart-bar" size="25px"/>
-                </q-item-section>
-                <q-item-section>Estadisticas</q-item-section>
-              </q-item>
-          </q-expansion-item>
-          <!-- config item to put categories -->
-          <q-expansion-item v-model="models[3].value" :content-inset-level="0.5" expand-separator>
-            <template v-slot:header>
-                <q-item-section avatar>
-                  <q-avatar>
-                    <q-icon name="fas fa-tools" size="25px" />
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section>Configuración</q-item-section>
-            </template>
-              <q-item clickable active-class="text-primary" :to="{ name: 'configs' }">
-                <q-item-section avatar>
-                  <q-icon name="newspaper" size="25px"/>
-                </q-item-section>
-                <q-item-section>Configuración</q-item-section>
-              </q-item>
-          </q-expansion-item>
+          </q-expansion-item>  
+        
         </q-list>
       </q-drawer>
   
@@ -117,28 +67,65 @@
   } */
 
 
-  const models = ref([
+  const lateralbar = ref([
     {
-      value: true
+      name: 'Inicio',
+      model: false,
+      icon: 'home',
+      validate: [],
+      items: [
+        {
+          to: 'index',
+          icon: 'home',
+          name: 'Inicio'
+        },
+      ]
     },
     {
-      value: false
+      name: 'Movimientos',
+      model: false,
+      icon: 'library_books',
+      validate: [],
+      items: [
+        {
+          to: 'movements',
+          icon: 'library_books',
+          name: 'Movimientos'
+        },
+      ]
     },
     {
-      value: false
+      name: 'Estadisticas',
+      model: false,
+      icon: 'analytics',
+      validate: [],
+      items: [
+        {
+          to: 'statistics',
+          icon: 'fas fa-chart-bar',
+          name: 'Estadisticas'
+        },
+      ]
     },
     {
-      value: false
-    },
+      name: 'Configuración',
+      model: false,
+      icon: 'fas fa-tools',
+      validate: [],
+      items: [
+        {
+          to: 'configs',
+          icon: 'newspaper',
+          name: 'Configuración'
+        },
+      ]
+    }
   ])
   
   function toggleLeftDrawer() {
     leftDrawerOpen.value = !leftDrawerOpen.value
   }
 
-  watch(models, ()=>{
-    console.log('hello');
-  });
 
   </script>
   
