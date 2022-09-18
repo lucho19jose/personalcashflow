@@ -38,5 +38,21 @@ const saveNewRecord = (newOnetransaction: transactionformat) => {
   }
 }
 
-export { getStorageData, saveNewRecord };
+const removeRecord = (position: number) => {
+  try {
+    let transactions: transactionformat[] | null = LocalStorage.getItem('transactions');
+    if(transactions){
+      transactions?.splice(position, 1);
+      LocalStorage.set('transactions', transactions);
+      return 200;
+    }else{
+      transactions = []/* just for typescript error */
+    }
+  } catch (error) {
+    console.log(error);
+    return 500;
+  }
+}
+
+export { getStorageData, saveNewRecord, removeRecord };
 export type { transactionformat };

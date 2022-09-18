@@ -110,6 +110,7 @@ module.exports = configure(function (/* ctx */) {
         'Notify',
         'LocalStorage',
         'SessionStorage',
+        'Dialog'
       ]
     },
 
@@ -170,7 +171,9 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
     capacitor: {
-      hideSplashscreen: true
+      hideSplashscreen: true,
+      backButtonExit: true/false/'*'/['/login', '/home', '/my-page'],
+      backButton: true/false
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron
