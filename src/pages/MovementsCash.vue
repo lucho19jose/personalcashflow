@@ -3,7 +3,7 @@
     <div class="row justify-center">
       <q-card class="q-mb-md bg-light-blue-4" style="width: 60%;">
         <q-card-section style="text-align: center;">
-          Monto Actual: S/.{{ TotalMoney() }}
+          Saldo Actual: S/.{{ TotalMoney().toFixed(2) }}
         </q-card-section>
       </q-card>
     </div>
@@ -78,10 +78,10 @@
 <style scoped>
 
   .income{
-    border: 1px solid green;
+    border: 1px solid #77C66E;
   }
 
   .expense{
-    border: 1px solid red;
+    border: 1px solid rgb(255, 99, 132);
   }
 </style>
