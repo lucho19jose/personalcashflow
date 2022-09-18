@@ -1,13 +1,24 @@
 import { RouteRecordRaw } from 'vue-router';
 
+const redirectroute = (to: any, from: any, next: any) => {
+		return next({ name: 'startIndex'});
+};
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
+    name: 'start',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { 
         path: '',
         name: 'index',
+        beforeEnter: redirectroute,
+        component: () => import('pages/IndexPage.vue') 
+      },
+      { 
+        path: '/home',
+        name: 'startIndex',
         component: () => import('pages/IndexPage.vue') 
       },
       { 

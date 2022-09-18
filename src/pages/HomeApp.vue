@@ -58,8 +58,10 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue';
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
   
+  const router = useRouter()
   const leftDrawerOpen = ref(false)
 
   /* interface lateralbar {
@@ -75,7 +77,7 @@
       validate: [],
       items: [
         {
-          to: 'index',
+          to: 'startIndex',
           icon: 'home',
           name: 'Inicio'
         },
@@ -125,6 +127,20 @@
   function toggleLeftDrawer() {
     leftDrawerOpen.value = !leftDrawerOpen.value
   }
+
+  const currentr = ref<string | symbol | undefined| null>('');
+  const sectionSelected  = ref<string | symbol | undefined| null>('');
+  function activeCurretRoute() {
+    currentr.value = router.currentRoute.value.name;
+    for(let i = 0; i<lateralbar.value.length; i++){
+      if(lateralbar.value[i].items.find(item => item.to == currentr.value)){
+        lateralbar.value[i].model = true;
+        sectionSelected.value = lateralbar.value[i].name;
+        break;
+      }
+    }
+  }
+  activeCurretRoute();
 
 
   </script>
