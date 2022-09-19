@@ -12,20 +12,37 @@
       :height="400"
       :title="'Categorias'"
     />
+    <div class="q-my-md">
+      <q-separator/>
+    </div>
+    <Doughnut
+      :chart-options="chartOptionsDoughnut"
+      :chart-data="chartDataDoughnut"
+      :chart-id="'doughnut-chart'"
+      :dataset-id-key="'label'"
+      :plugins="[]"
+      :css-classes="''"
+      :styles="{}"
+      :width="400"
+      :height="400"
+      :title="'In/Out'"
+    />
   </q-page>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { Bar, Doughnut } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
 import { getStorageData } from 'src/composables/useStorage';
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
 
 const data = ref(getStorageData());
 const categories = ref(['Alimentacion', 'Pasaje', 'Estudio', 'Diversion', 'Otro']);
 
 const datatograph = ref<number[]>([]); 
+const countexpenses = ref(0);
+const countincomes = ref(0);
 function formatdata(){
   if(data.value){
     categories.value.forEach((category)=>{
@@ -40,6 +57,17 @@ function formatdata(){
   }
 }
 formatdata();
+
+function countexpensesandincomes (){
+  data.value?.forEach((item)=>{
+    if(item.type === 'expense'){
+      countexpenses.value = countexpenses.value + parseFloat(item.amount.toString());
+    }else{
+      countincomes.value = countincomes.value + parseFloat(item.amount.toString());
+    }
+  })
+}
+countexpensesandincomes()
 
 const chartData = {
   labels: categories.value,
@@ -70,12 +98,37 @@ const chartData = {
   ]
 }
 
+const chartDataDoughnut = {
+  labels: ['Gastos', 'Ingresos'],
+  datasets: [ 
+    {
+      label: 'Gastos/Ingresos',
+      data: [countexpenses.value, countincomes.value],
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(54, 162, 235)',
+      ],
+      hoverOffset: 4
+    }
+  ]
+}
+
 const chartOptions = { 
   responsive: true,
   plugins: {
     title: {
       display: true,
       text: 'Estadistica por Categorias'
+    }
+  }
+}
+
+const chartOptionsDoughnut = { 
+  responsive: true,
+  plugins: {
+    title: {
+      display: true,
+      text: 'Gastos-Ingresos'
     }
   }
 }
