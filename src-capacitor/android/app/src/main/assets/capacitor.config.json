@@ -1,6 +1,6 @@
 {
   "appId": "org.capacitor.quasar.app",
-  "appName": "cashflowforyou",
+  "appName": "wastecontrol",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "www"
