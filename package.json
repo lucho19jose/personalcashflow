@@ -13,7 +13,9 @@
   "dependencies": {
     "@capacitor/core": "^4.2.0",
     "@quasar/extras": "^1.0.0",
+    "@types/canvas-confetti": "^1.4.3",
     "axios": "^0.21.1",
+    "canvas-confetti": "^1.6.0",
     "chart.js": "^3.9.1",
     "pinia": "^2.0.11",
     "quasar": "^2.8.3",

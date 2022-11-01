@@ -13,7 +13,7 @@
       <q-input ref="descriptionref" outlined v-model="description" label="Descripcion"/>
     </div>
     <div v-if="name == 'Ingreso'">
-      <SettingsAccounts :total="parseInt(amount.toString())"></SettingsAccounts>
+      <SettingsAccounts :total="parseInt(amount.toString())" @accountsPercentajes="getpercentajes"></SettingsAccounts>
     </div>
     <div class=" row justify-center">
       <q-btn color="primary" :label="`Añadir ${ props.name }`" type="submit"/>
@@ -23,8 +23,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar'
-import { getStorageData, saveNewRecord } from 'src/composables/useStorage';
+import { getStorageData, saveNewRecord, settoaccounts } from 'src/composables/useStorage';
 import SettingsAccounts from 'components/SettingsAccounts.vue';
+import confetti from 'canvas-confetti';
+
+//const confetti = require('canvas-confetti');
 
   const $q = useQuasar();
   const amount = ref<number>(0);
@@ -32,6 +35,9 @@ import SettingsAccounts from 'components/SettingsAccounts.vue';
   const categoriesnew = ref<string[]>(['Necesidades Básicas', 'Libertad Financiera', 'Cuenta para Formación', 'Cuenta para Ahorros a Largo Plazo', 'Cuenta para Donativos', 'Cuenta para Divertirse']);
   //const categories = ref<string[]>(['Alimentacion', 'Pasaje', 'Estudio', 'Diversion', 'Otro']);
   const categoryselected = ref<string>('');
+  
+
+  const percentajesValues = ref([50, 10, 10, 10, 10, 10])
 
   interface refs {
     resetValidation: ()=> void,
@@ -71,6 +77,17 @@ import SettingsAccounts from 'components/SettingsAccounts.vue';
       
       const status = saveNewRecord(newOnetransaction);
       console.log('status', status);
+      
+      if(props.name != 'Gasto'){
+        const saveaccounts = settoaccounts(percentajesValues.value, amount.value)
+        console.log('responsesaveaccounts', saveaccounts);
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+      
 
       if(status === 200){
         $q.notify({
@@ -120,6 +137,18 @@ import SettingsAccounts from 'components/SettingsAccounts.vue';
 
   const selectinput = () => {
     amountref.value?.select();
+  }
+
+  const getpercentajes = (ev: number[]) => {
+    console.log(ev);
+    if(ev){
+      percentajesValues.value[0] = ev[0];
+      percentajesValues.value[1] = ev[1];
+      percentajesValues.value[2] = ev[2];
+      percentajesValues.value[3] = ev[3];
+      percentajesValues.value[4] = ev[4];
+      percentajesValues.value[5] = ev[5];
+    }
   }
 
 

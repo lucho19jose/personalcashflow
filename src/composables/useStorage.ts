@@ -23,15 +23,13 @@ const saveNewRecord = (newOnetransaction: transactionformat) => {
 
     if(transactions){
       console.log('transactions2', transactions);
-      
       transactions?.unshift(newOnetransaction)
       console.log('transactions3', transactions);
-      LocalStorage.set('transactions', transactions);
     }else{
       transactions = [];
       transactions.unshift(newOnetransaction)
-      LocalStorage.set('transactions', transactions);
     }
+    LocalStorage.set('transactions', transactions);
     return 200;
   } catch (error) {
     return 500;
@@ -54,5 +52,30 @@ const removeRecord = (position: number) => {
   }
 }
 
-export { getStorageData, saveNewRecord, removeRecord };
+const settoaccounts = (accountpercentajes: number[], amount: number) => {
+  try {
+    const accounts: number[] | null = LocalStorage.getItem('accounts');
+    if(accounts && accounts?.length>0){
+      for(let i = 0; i<accountpercentajes.length; i++){
+        console.log(parseFloat((amount*accountpercentajes[i]/100).toString()).toFixed(2));
+        
+        accounts[i] = Number(parseFloat((accounts[i] + amount*accountpercentajes[i]/100).toString()).toFixed(2))
+      }
+      LocalStorage.set('accounts', accounts);
+    }else{
+      const arrayAccount: number[] = [];
+      for(let i = 0; i<accountpercentajes.length; i++){
+        arrayAccount?.push(amount*accountpercentajes[i]/100)
+      }
+      LocalStorage.set('accounts', arrayAccount);
+    }
+    console.log('accounts', accounts);
+    return 200;
+  } catch (error) {
+    console.log(error);
+    return 500;
+  }
+}
+
+export { getStorageData, saveNewRecord, removeRecord, settoaccounts };
 export type { transactionformat };
