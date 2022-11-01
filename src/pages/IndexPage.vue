@@ -34,13 +34,19 @@
 
         </q-tab-panels>
       </q-card>
+      <q-card class="q-mt-md">
+        <q-card-section>
+          <PhrasesComponent></PhrasesComponent>
+        </q-card-section>
+      </q-card>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import AppForm from 'src/components/AppForm.vue';
+import { ref } from 'vue';
+import AppForm from 'src/components/AppForm.vue';
+import PhrasesComponent from 'src/components/PhrasesComponent.vue';
   
   const tab = ref<string>('expenses'); 
 

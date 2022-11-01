@@ -6,11 +6,14 @@
         :rules="[val => val.length > 0 && val !=0 || 'Ingrese el monto']" ref="amountref" @click="selectinput" lazy-rules/>
     </div>
     <div v-if="props.category" class="q-mb-sm">
-      <q-select ref="categoryref" outlined v-model="categoryselected" :options="categories" label="Categoria" 
+      <q-select ref="categoryref" outlined v-model="categoryselected" :options="categoriesnew" label="Categoria" 
         :rules="[val => val.length > 0 || 'Seleccione la categoria']" lazy-rules/>
     </div>
     <div class="q-mb-sm">
-      <q-input ref="descriptionref" outlined v-model="description" label="Descripcion" />
+      <q-input ref="descriptionref" outlined v-model="description" label="Descripcion"/>
+    </div>
+    <div v-if="name == 'Ingreso'">
+      <SettingsAccounts :total="parseInt(amount.toString())"></SettingsAccounts>
     </div>
     <div class=" row justify-center">
       <q-btn color="primary" :label="`Añadir ${ props.name }`" type="submit"/>
@@ -18,25 +21,31 @@
   </q-form>
 </template>
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { useQuasar } from 'quasar'
-  import { getStorageData, saveNewRecord } from 'src/composables/useStorage';
+import { ref } from 'vue';
+import { useQuasar } from 'quasar'
+import { getStorageData, saveNewRecord } from 'src/composables/useStorage';
+import SettingsAccounts from 'components/SettingsAccounts.vue';
 
   const $q = useQuasar();
   const amount = ref<number>(0);
   const description = ref<string>('');
-  const categories = ref<string[]>(['Alimentacion', 'Pasaje', 'Estudio', 'Diversion', 'Otro']);
+  const categoriesnew = ref<string[]>(['Necesidades Básicas', 'Libertad Financiera', 'Cuenta para Formación', 'Cuenta para Ahorros a Largo Plazo', 'Cuenta para Donativos', 'Cuenta para Divertirse']);
+  //const categories = ref<string[]>(['Alimentacion', 'Pasaje', 'Estudio', 'Diversion', 'Otro']);
   const categoryselected = ref<string>('');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const amountref:any= ref(null)
-  const categoryref:any = ref(null)
-  const descriptionref:any = ref(null)
+  interface refs {
+    resetValidation: ()=> void,
+    select: ()=> void
+  }
+
+  const amountref= ref<null| refs>(null);
+
+  const categoryref = ref<null | refs>(null);
+  const descriptionref = ref<null| refs>(null);
 
   const props = defineProps({
     name: { type: String, required: true },
     category: { type: Boolean, default: true },
-
   })
 
   interface newtransaction {
@@ -72,9 +81,12 @@
         amount.value = 0;
         categoryselected.value = '';
         description.value? description.value = '': '';
-        amountref.value.resetValidation();
-        categoryref.value?.resetValidation();
-        descriptionref.value.resetValidation();
+        amountref.value?.resetValidation();
+        console.log('categoryref', categoryref.value);
+        if(categoryref.value){
+          categoryref.value?.resetValidation();
+        }
+        descriptionref.value?.resetValidation();
       }else{
         $q.notify({
           type: 'negative',
@@ -90,8 +102,7 @@
       })
     }
   }
-
-
+  
   const generateoneID = (): number => {
     let transactions: newtransaction[] | null = getStorageData()
     if(transactions){
