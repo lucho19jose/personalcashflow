@@ -30,7 +30,9 @@ const emit = defineEmits(['accountsPercentajes', 'specificAccount', 'update:togg
 
 const sendEmitvalues = ()=>{
   if(!toggle.value){
-    emit('accountsPercentajes', [parseInt(account1.value.toString()), parseInt(account2.value.toString()), parseInt(account3.value.toString()), parseInt(account4.value.toString()), parseInt(account5.value.toString()), parseInt(account6.value.toString())])  
+    console.log(account1.value);
+    
+    emit('accountsPercentajes', [account1.value, account2.value, account3.value, account4.value, account5.value, account6.value])  
   }
 }
 
@@ -64,22 +66,22 @@ const categoryselected = ref<selectCategories | null>(null);
           <q-toggle v-model="toggle" label="Añadir a una cuenta especifica" @update:model-value="$emit('update:toggleValue', toggle)"/>
           <div v-show="!toggle">
             <div class="q-mb-sm">
-              <q-input ref="account11" type="number" suffix="%" outlined v-model="account1" @update:model-value="sendEmitvalues" label="Cuenta de Necesidades Básicas" :hint="(account1*props.total/100).toString()"/>
+              <q-input ref="account11" type="number" suffix="%" outlined v-model.number="account1" @update:model-value="sendEmitvalues" label="Cuenta de Necesidades Básicas" :hint="(account1*props.total/100).toString()"/>
             </div>
             <div class="q-mb-sm">
-              <q-input ref="account21" type="number" suffix="%" outlined v-model="account2" @update:model-value="sendEmitvalues" label="Cuenta de Libertad Financiera" :hint="(account2*props.total/100).toString()"/>
+              <q-input ref="account21" type="number" suffix="%" outlined v-model.number="account2" @update:model-value="sendEmitvalues" label="Cuenta de Libertad Financiera" :hint="(account2*props.total/100).toString()"/>
             </div>
             <div class="q-mb-sm">
-              <q-input ref="account31" type="number" suffix="%" outlined v-model="account3" @update:model-value="sendEmitvalues" label="Cuenta para Formación" :hint="(account3*props.total/100).toString()"/>
+              <q-input ref="account31" type="number" suffix="%" outlined v-model.number="account3" @update:model-value="sendEmitvalues" label="Cuenta para Formación" :hint="(account3*props.total/100).toString()"/>
             </div>
             <div class="q-mb-sm">
-              <q-input ref="account41" type="number" suffix="%" outlined v-model="account4" @update:model-value="sendEmitvalues" label="Cuenta para Ahorros a Largo Plazo" :hint="(account4*props.total/100).toString()"/>
+              <q-input ref="account41" type="number" suffix="%" outlined v-model.number="account4" @update:model-value="sendEmitvalues" label="Cuenta para Ahorros a Largo Plazo" :hint="(account4*props.total/100).toString()"/>
             </div>
             <div class="q-mb-sm">
-              <q-input ref="account51" type="number" suffix="%" outlined v-model="account5" @update:model-value="sendEmitvalues" label="Cuenta para Donativos" :hint="(account5*props.total/100).toString()"/>
+              <q-input ref="account51" type="number" suffix="%" outlined v-model.number="account5" @update:model-value="sendEmitvalues" label="Cuenta para Donativos" :hint="(account5*props.total/100).toString()"/>
             </div>
             <div class="q-mb-sm">
-              <q-input ref="account61" type="number" suffix="%" outlined v-model="account6" @update:model-value="sendEmitvalues" label="Cuenta para Divertirse" :hint="(account6*props.total/100).toString()"/>
+              <q-input ref="account61" type="number" suffix="%" outlined v-model.number="account6" @update:model-value="sendEmitvalues" label="Cuenta para Divertirse" :hint="(account6*props.total/100).toString()"/>
             </div>
           </div>
           <div v-show="toggle">

@@ -2,8 +2,8 @@
   <q-form @submit="saveForm">
     <div class="text-h6" style="text-align:center;">Añadir nuevo {{ props.name }}</div>
     <div class="q-mb-sm">
-      <q-input outlined type="number" step=".01" v-model="amount" label="Monto" 
-        :rules="[val => val.length > 0 && val !=0 || 'Ingrese el monto']" ref="amountref" @click="selectinput" lazy-rules/>
+      <q-input outlined type="number" step=".01" v-model.number="amount" label="Monto" 
+        :rules="[val => val && val !=0 || 'Ingrese el monto']" ref="amountref" @click="selectinput" lazy-rules/>
     </div>
     <div v-if="props.category" class="q-mb-sm">
       <q-select ref="categoryref" outlined v-model="categoryselected" :options="categoriesnew" label="Categoria" 
