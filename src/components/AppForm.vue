@@ -13,7 +13,7 @@
       <q-input ref="descriptionref" outlined v-model="description" label="Descripcion"/>
     </div>
     <div v-if="name == 'Ingreso'">
-      <SettingsAccounts :total="parseInt(amount.toString())" @accountsPercentajes="getpercentajes"></SettingsAccounts>
+      <SettingsAccounts :total="parseInt(amount.toString())" @accountsPercentajes="getpercentajes" @specificAccount="getSpecificAccount" v-model:toggle-value="isSpecificAccount"></SettingsAccounts>
     </div>
     <div class=" row justify-center">
       <q-btn color="primary" :label="`Añadir ${ props.name }`" type="submit"/>
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar'
-import { getStorageData, saveNewRecord, settoaccounts } from 'src/composables/useStorage';
+import { getStorageData, saveNewRecord, settoaccounts, settospecificaccount } from 'src/composables/useStorage';
 import SettingsAccounts from 'components/SettingsAccounts.vue';
 import confetti from 'canvas-confetti';
 
@@ -79,7 +79,13 @@ import confetti from 'canvas-confetti';
       console.log('status', status);
       
       if(props.name != 'Gasto'){
-        const saveaccounts = settoaccounts(percentajesValues.value, amount.value)
+        let saveaccounts = 0;
+        if(!isSpecificAccount.value){
+          saveaccounts = settoaccounts(percentajesValues.value, parseFloat(amount.value.toString()))
+        }else if(specificAccountvalue.value){
+          saveaccounts = settospecificaccount(specificAccountvalue.value?.value, parseFloat(amount.value.toString()))
+        }
+
         console.log('responsesaveaccounts', saveaccounts);
         confetti({
           particleCount: 100,
@@ -148,6 +154,20 @@ import confetti from 'canvas-confetti';
       percentajesValues.value[3] = ev[3];
       percentajesValues.value[4] = ev[4];
       percentajesValues.value[5] = ev[5];
+    }
+  }
+  interface selectCategories {
+    label: string,
+    value:  number
+  }
+  const isSpecificAccount = ref(false);
+  const specificAccountvalue = ref<selectCategories | null>(null)
+
+  const getSpecificAccount = (ev: selectCategories) => {
+    if(ev){
+      isSpecificAccount.value = true;
+      //console.log('specificAccount', ev);
+      specificAccountvalue.value = ev;
     }
   }
 

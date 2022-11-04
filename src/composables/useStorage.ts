@@ -77,5 +77,23 @@ const settoaccounts = (accountpercentajes: number[], amount: number) => {
   }
 }
 
-export { getStorageData, saveNewRecord, removeRecord, settoaccounts };
+const settospecificaccount = (account: number, amount: number) => {
+  try {
+    const accounts: number[] | null = LocalStorage.getItem('accounts');
+    if(accounts && accounts?.length>0){
+      accounts[account] = Number(parseFloat((accounts[account] + amount).toString()).toFixed(2))
+      
+      LocalStorage.set('accounts', accounts);
+      console.log('accounts', accounts);
+      return 200;
+    }else{
+      throw 'something went wrong';
+      return 500;
+    }
+  } catch (error) {
+    return 500;
+  }
+}
+
+export { getStorageData, saveNewRecord, removeRecord, settoaccounts, settospecificaccount };
 export type { transactionformat };
