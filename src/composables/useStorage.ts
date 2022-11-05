@@ -77,11 +77,17 @@ const settoaccounts = (accountpercentajes: number[], amount: number) => {
   }
 }
 
-const settospecificaccount = (account: number, amount: number) => {
+const settospecificaccount = (account: number, amount: number, type = 'income') => {
   try {
     const accounts: number[] | null = LocalStorage.getItem('accounts');
     if(accounts && accounts?.length>0){
-      accounts[account] = Number(parseFloat((accounts[account] + amount).toString()).toFixed(2))
+      if(type == 'expense'){
+        console.log('expense..............');
+        
+        accounts[account] = Number(parseFloat((accounts[account] - amount).toString()).toFixed(2))
+      }else{
+        accounts[account] = Number(parseFloat((accounts[account] + amount).toString()).toFixed(2))
+      }
       
       LocalStorage.set('accounts', accounts);
       console.log('accounts', accounts);

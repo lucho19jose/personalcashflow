@@ -85,7 +85,7 @@ const categoryselected = ref<selectCategories | null>(null);
             </div>
           </div>
           <div v-show="toggle">
-            <q-select ref="categoryref" outlined v-model="categoryselected" :options="categoriesnew" label="Categoria" 
+            <q-select ref="categoryref" outlined v-model="categoryselected" :options="categoriesnew" label="Cuenta" 
               :rules="[val => val || !toggle || 'Seleccione la categoria']" lazy-rules @update:model-value="$emit('specificAccount', categoryselected)"/>
           </div>
         </div>

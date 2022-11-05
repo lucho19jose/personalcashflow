@@ -7,7 +7,7 @@
     </div>
     <div v-if="props.category" class="q-mb-sm">
       <q-select ref="categoryref" outlined v-model="categoryselected" :options="categoriesnew" label="Categoria" 
-        :rules="[val => val.length > 0 || 'Seleccione la categoria']" lazy-rules/>
+        :rules="[val => val || 'Seleccione la categoria']" lazy-rules/>
     </div>
     <div class="q-mb-sm">
       <q-input ref="descriptionref" outlined v-model="description" label="Descripcion"/>
@@ -32,9 +32,15 @@ import confetti from 'canvas-confetti';
   const $q = useQuasar();
   const amount = ref<number>(0);
   const description = ref<string>('');
-  const categoriesnew = ref<string[]>(['Necesidades Básicas', 'Libertad Financiera', 'Cuenta para Formación', 'Cuenta para Ahorros a Largo Plazo', 'Cuenta para Donativos', 'Cuenta para Divertirse']);
-  //const categories = ref<string[]>(['Alimentacion', 'Pasaje', 'Estudio', 'Diversion', 'Otro']);
-  const categoryselected = ref<string>('');
+  const categoriesnew = ref<selectCategories[]>([
+  { label: 'Necesidades Básicas', value: 0},
+  { label: 'Libertad Financiera', value: 1},
+  { label: 'Cuenta para Formación', value: 2}, 
+  { label: 'Cuenta para Ahorros a Largo Plazo', value: 3}, 
+  { label: 'Cuenta para Donativos', value: 4}, 
+  { label: 'Cuenta para Divertirse', value: 5}]);
+
+  const categoryselected = ref<selectCategories | null>(null);
   
 
   const percentajesValues = ref([50, 10, 10, 10, 10, 10])
@@ -69,7 +75,7 @@ import confetti from 'canvas-confetti';
       const newOnetransaction: newtransaction = {
         id: generateoneID(),
         amount: amount.value,
-        category: categoryselected.value,
+        category: categoryselected.value?.label,
         description: description.value,
         date: date.getFullYear()+'-'+(date.getMonth()+1)+'-'+ date.getDate() + ' ' + date.getHours()+':'+date.getMinutes()+':'+ date.getSeconds(),
         type: props.name == 'Gasto' ? 'expense' : 'income'
@@ -78,31 +84,34 @@ import confetti from 'canvas-confetti';
       const status = saveNewRecord(newOnetransaction);
       console.log('status', status);
       
+      let saveaccounts = 0;
       if(props.name != 'Gasto'){
-        let saveaccounts = 0;
         if(!isSpecificAccount.value){
           saveaccounts = settoaccounts(percentajesValues.value, parseFloat(amount.value.toString()))
         }else if(specificAccountvalue.value){
-          saveaccounts = settospecificaccount(specificAccountvalue.value?.value, parseFloat(amount.value.toString()))
+          saveaccounts = settospecificaccount(specificAccountvalue.value?.value, parseFloat(amount.value.toString()), 'income')
         }
 
-        console.log('responsesaveaccounts', saveaccounts);
         confetti({
           particleCount: 100,
           spread: 70,
           origin: { y: 0.6 }
         });
+      }else{
+        if(categoryselected.value){
+          saveaccounts = settospecificaccount(categoryselected.value?.value, parseFloat(amount.value.toString()), 'expense')
+        }
       }
       
 
-      if(status === 200){
+      if(status === 200 && saveaccounts == 200){
         $q.notify({
           type: 'positive',
           message: 'Registro añadido correctamente !',
           timeout: 500,
         })
         amount.value = 0;
-        categoryselected.value = '';
+        categoryselected.value = null;
         description.value? description.value = '': '';
         amountref.value?.resetValidation();
         console.log('categoryref', categoryref.value);
