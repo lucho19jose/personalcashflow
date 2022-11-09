@@ -10,7 +10,7 @@
       :styles="{}"
       :width="400"
       :height="400"
-      :title="'Categorias'"
+      :title="'Cuentas'"
     />
     <div class="q-my-md">
       <q-separator/>
@@ -33,30 +33,23 @@
 import { ref } from 'vue'
 import { Bar, Doughnut } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
-import { getStorageData } from 'src/composables/useStorage';
+import { getStorageData, getAccounts } from 'src/composables/useStorage';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
 
 const data = ref(getStorageData());
-const categories = ref(['Alimentacion', 'Pasaje', 'Estudio', 'Diversion', 'Otro']);
+const categories = ref(
+  ['Necesidades Básicas',
+  'Libertad Financiera',
+  'Cuenta para Formación',
+  'Cuenta para Ahorros a Largo Plazo',
+  'Cuenta para Donativos',
+  'Cuenta para Divertirse']
+); 
 
-const datatograph = ref<number[]>([]); 
+const datatograph = ref<number[]>(getAccounts()); 
 const countexpenses = ref(0);
 const countincomes = ref(0);
-function formatdata(){
-  if(data.value){
-    categories.value.forEach((category)=>{
-      let sum = 0;
-      data.value?.forEach((item) =>{
-        if(item.type === 'expense' && item.category === category){
-          sum = sum + parseFloat(item.amount.toString());
-        }
-      })
-      datatograph.value.push(sum)
-    })    
-  }
-}
-formatdata();
 
 function countexpensesandincomes (){
   data.value?.forEach((item)=>{
@@ -118,7 +111,7 @@ const chartOptions = {
   plugins: {
     title: {
       display: true,
-      text: 'Estadistica por Categorias'
+      text: 'Grafico de Barra para Cuentas'
     }
   }
 }

@@ -82,7 +82,6 @@ const settospecificaccount = (account: number, amount: number, type = 'income') 
     const accounts: number[] | null = LocalStorage.getItem('accounts');
     if(accounts && accounts?.length>0){
       if(type == 'expense'){
-        console.log('expense..............');
         
         accounts[account] = Number(parseFloat((accounts[account] - amount).toString()).toFixed(2))
       }else{
@@ -101,5 +100,13 @@ const settospecificaccount = (account: number, amount: number, type = 'income') 
   }
 }
 
-export { getStorageData, saveNewRecord, removeRecord, settoaccounts, settospecificaccount };
+const getAccounts = () => {
+  const accounts: number[] | null = LocalStorage.getItem('accounts');
+  if(accounts){
+    return accounts;
+  }
+  return [];
+}
+
+export { getStorageData, saveNewRecord, removeRecord, settoaccounts, settospecificaccount, getAccounts };
 export type { transactionformat };
