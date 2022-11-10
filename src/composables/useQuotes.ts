@@ -5,17 +5,12 @@ interface phrases {
 
 let quotes: phrases[] | [] = [];
 
-fetch('src/assets/phrases.json')
-  .then(response => response.json())
-  .then((json) => {
-    console.log(json)
-    quotes = json;
-  });
-
-  function getOneQuote(){
-    const rand = Math.floor(Math.random() * quotes.length);
-    return quotes[rand];
-  }
+async function getOneQuote(){
+  const response = await fetch('src/assets/phrases.json');
+  quotes = await response.json();
+  const rand = Math.floor(Math.random() * quotes.length);
+  return quotes[rand];
+}
 
 
 export { quotes, getOneQuote }

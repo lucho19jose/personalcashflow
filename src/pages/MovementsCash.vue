@@ -1,16 +1,19 @@
 <template>
   <q-page padding>
     <div class="row justify-center">
-      <q-card class="q-mb-md bg-light-blue-4" style="width: 60%;">
+      <q-card class="q-mb-md bg-light-blue-4" style="width: 80%;">
         <q-card-section style="text-align: center;">
-          Saldo Actual: S/.{{ TotalMoney().toFixed(2) }}
+          <p class="text-weight-bold">Saldo Actual: S/.{{ Currenttotal.toFixed(2) }}</p>
+          <p class="text-weight-bold">Monto de Egreso : S/.{{ totalExpense.toFixed(2) }}</p>
+          <p class="text-weight-bold">Entradas Totales : S/.{{ totalIncomes.toFixed(2) }}</p>
+
         </q-card-section>
       </q-card>
     </div>
     <q-card class="q-mb-sm" :class="[ transaction.type == 'expense' ? 'expense':'income', ]" style="width: 100%" v-for="transaction in transactions" :key="transaction.id">
       <q-card-section class="row justify-between">
         <div>
-          S/.{{ transaction.amount }} - {{ transaction.category }} - {{ transaction.description.length > 28 ? transaction.description.substring(0,25)+ '...': transaction.description }}
+          S/.{{ transaction.amount }} - {{ transaction.category }} - {{ transaction?.description.length > 28 ? transaction?.description.substring(0,25)+ '...': transaction?.description }}
         </div>
         <div>
           <!-- <q-btn dense round flat color="grey" @click="deleteRow(transaction)" icon="edit" aria-label="eliminar">
@@ -30,20 +33,26 @@
   const $q = useQuasar();
   const transactions = ref(getStorageData());
 
-  const TotalMoney = ():number => {
+  const totalExpense = ref(0);
+  const totalIncomes = ref(0);
+  const Currenttotal = ref(0);
+
+  const TotalMoney = ():void => {
+    let count = 0;
     if(transactions.value){
-      let count = 0;
       transactions.value.forEach((element) => {
         if(element.type == 'expense'){
           count = count - parseFloat(element.amount.toString()); 
+          totalExpense.value = totalExpense.value + parseFloat(element.amount.toString());
         }else{
           count = count + parseFloat(element.amount.toString()); 
+          totalIncomes.value = totalIncomes.value + parseFloat(element.amount.toString());
         }
       })
-      return count;
     }
-    return 0;
+    Currenttotal.value = count;
   }
+  TotalMoney();
 
   const deleteRow = (transaction: transactionformat)=>{
     $q.dialog({
@@ -69,6 +78,7 @@
           }
           removeRecord(index);
           transactions.value = getStorageData();
+          TotalMoney();
         }
 			})
   }
