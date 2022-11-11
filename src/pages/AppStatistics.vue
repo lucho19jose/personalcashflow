@@ -30,22 +30,16 @@
   </q-page>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Bar, Doughnut } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
+import { ref } from 'vue';
+import { Bar, Doughnut } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js';
 import { getStorageData, getAccounts } from 'src/composables/useStorage';
+import { categories } from 'src/utils/DefaultConfigs';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
 
 const data = ref(getStorageData());
-const categories = ref(
-  ['Necesidades Básicas',
-  'Libertad Financiera',
-  'Cuenta para Formación',
-  'Cuenta para Ahorros a Largo Plazo',
-  'Cuenta para Donativos',
-  'Cuenta para Divertirse']
-); 
+
 
 const datatograph = ref<number[]>(getAccounts()); 
 const countexpenses = ref(0);
@@ -63,7 +57,7 @@ function countexpensesandincomes (){
 countexpensesandincomes()
 
 const chartData = {
-  labels: categories.value,
+  labels: categories,
   datasets: [ 
     {
       label: 'Gastos',

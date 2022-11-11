@@ -2,7 +2,7 @@
 import{ ref } from 'vue'
 import { getOneQuote } from 'src/composables/useQuotes'
 
- const quote = ref(await getOneQuote());
+ const quote = ref(getOneQuote());
 
 </script>
 

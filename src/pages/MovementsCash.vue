@@ -28,7 +28,8 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useQuasar } from 'quasar';
-  import { transactionformat, getStorageData, removeRecord } from 'src/composables/useStorage';
+  import { transactionformat, getStorageData, removeRecord, settospecificaccount } from 'src/composables/useStorage';
+  import { categories } from 'src/utils/DefaultConfigs';
 
   const $q = useQuasar();
   const transactions = ref(getStorageData());
@@ -68,17 +69,20 @@
 				},
 				persistent: false
 			}).onOk(() => {
-        let index = 0;
+        /* when delete we remove record and make current calculus in totals and specific account */
         if(transactions.value){
-          for(let i = 0; i <transactions.value?.length; i++){
-            if(transactions.value[i].id == transaction.id){
-              index = i;
-              break;
+          const index = transactions.value.findIndex((item) => item.id == transaction.id);
+          
+          if(index || index == 0){
+            if(transaction.type = 'expense'){/* just for expense because with income we have to do another logic to make that all categories */
+              const categoryIndex = categories.findIndex((category) => category == transaction.category)
+              
+              settospecificaccount(categoryIndex, transaction.amount, transaction.type) /* calculus en specific account */
             }
+            removeRecord(index);
+            transactions.value = getStorageData();
+            TotalMoney(); /* total calculus  */
           }
-          removeRecord(index);
-          transactions.value = getStorageData();
-          TotalMoney();
         }
 			})
   }

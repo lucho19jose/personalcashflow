@@ -32,6 +32,10 @@ import confetti from 'canvas-confetti';
   const $q = useQuasar();
   const amount = ref<number>(0);
   const description = ref<string>('');
+  interface selectCategories {
+    label: string,
+    value:  number
+  }
   const categoriesnew = ref<selectCategories[]>([
   { label: 'Necesidades Básicas', value: 0},
   { label: 'Libertad Financiera', value: 1},
@@ -165,10 +169,7 @@ import confetti from 'canvas-confetti';
       percentajesValues.value[5] = ev[5];
     }
   }
-  interface selectCategories {
-    label: string,
-    value:  number
-  }
+
   const isSpecificAccount = ref(false);
   const specificAccountvalue = ref<selectCategories | null>(null)
 
