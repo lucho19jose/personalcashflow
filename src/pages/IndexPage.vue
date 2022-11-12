@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import AppForm from 'src/components/AppForm.vue';
+import PhrasesComponent from 'src/components/PhrasesComponent.vue';
+import { LocalStorage } from 'quasar'
+interface AppConfigs {
+  showquotes: boolean 
+}
+  
+const tab = ref<string>('expenses'); 
+
+ const showphrases: AppConfigs | null = LocalStorage.getItem('AppConfigs')
+
+</script>
 <template>
   <q-page padding class="row justify-evenly">
     <div style="width: 100%;">
@@ -34,7 +48,7 @@
 
         </q-tab-panels>
       </q-card>
-      <q-card class="q-mt-md">
+      <q-card class="q-mt-md" v-if="showphrases?.showquotes">
         <q-card-section>
           <PhrasesComponent></PhrasesComponent>
         </q-card-section>
@@ -42,13 +56,3 @@
     </div>
   </q-page>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-import AppForm from 'src/components/AppForm.vue';
-import PhrasesComponent from 'src/components/PhrasesComponent.vue';
-  
-  const tab = ref<string>('expenses'); 
-
-
-</script>
