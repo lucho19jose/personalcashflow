@@ -12,7 +12,7 @@
           />
   
           <q-toolbar-title>
-            wastecontrol
+            Cash Flow
           </q-toolbar-title>
   
           <div>Quasar v{{ $q.version }}</div>

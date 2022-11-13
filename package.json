@@ -1,8 +1,8 @@
 {
-  "name": "wastecontrol",
+  "name": "cash flow",
   "version": "0.0.1",
   "description": "beautiful chasflow app for you",
-  "productName": "wastecontrol",
+  "productName": "cash flow",
   "author": "lucho19jose <barbozagonzalesjose@gmail.com>",
   "private": true,
   "scripts": {
